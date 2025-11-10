@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'core/router/app_router.dart';
+import 'core/theme/app_theme.dart';
 import 'features/form/data/models/user_model.dart';
 import 'features/form/data/models/address_model.dart';
 
@@ -24,10 +25,7 @@ class MainApp extends StatelessWidget {
     return MaterialApp.router(
       title: 'DVP App',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
-        useMaterial3: true,
-      ),
+      theme: AppTheme.lightTheme,
       routerConfig: appRouter,
     );
   }
