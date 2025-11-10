@@ -1,14 +1,15 @@
-# dvp_app
+# Prueba técnica Double V Partners 
 
 Aplicación Flutter que permite gestionar perfiles de usuarios con información personal y de dirección. 
 
 ## 📋 Funcionalidades
 
 - **Onboarding**: Pantalla de bienvenida inicial con splash screen
-- **Formulario de Usuario**: Captura de datos personales (nombre, apellido, fecha de nacimiento, email, teléfono) y dirección (país, ciudad, dirección, código postal)
+- **Formulario de Usuario**: Captura de datos personales (nombre, apellido, fecha de nacimiento) y dirección (país, departamento, ciudad, dirección).
 - **Gestión de Perfiles**: Visualización de usuarios guardados con opción de actualizar y eliminar
 - **Integración con API**: Búsqueda de ciudades mediante GeoDB Cities API
 - **Persistencia Local**: Almacenamiento de datos con Hive
+- **Testing**: Pruebas unitarias
 
 ## 🚀 Cómo Clonar y Ejecutar
 
