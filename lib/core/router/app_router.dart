@@ -3,7 +3,6 @@ import 'package:go_router/go_router.dart';
 import '../../features/onboarding/presentation/screens/welcome_screen.dart';
 import '../../features/home/presentation/screens/home_screen.dart';
 import '../../features/form/presentation/screens/form_screen.dart';
-import '../../features/profile/presentation/screens/profile_screen.dart';
 import '../presentation/widgets/navigation_shell.dart';
 
 final GlobalKey<NavigatorState> _rootNavigatorKey = GlobalKey<NavigatorState>();
@@ -34,14 +33,6 @@ final appRouter = GoRouter(
             GoRoute(
               path: '/home',
               builder: (context, state) => const HomeScreen(),
-            ),
-          ],
-        ),
-        StatefulShellBranch(
-          routes: [
-            GoRoute(
-              path: '/profile',
-              builder: (context, state) => const ProfileScreen(),
             ),
           ],
         ),

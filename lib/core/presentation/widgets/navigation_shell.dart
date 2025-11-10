@@ -27,12 +27,8 @@ class NavigationShell extends StatelessWidget {
             label: 'Formulario',
           ),
           NavigationDestination(
-            icon: Icon(Icons.home),
-            label: 'Inicio',
-          ),
-          NavigationDestination(
             icon: Icon(Icons.person),
-            label: 'Perfil',
+            label: 'Perfiles',
           ),
         ],
       ),
