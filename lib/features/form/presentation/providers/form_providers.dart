@@ -10,7 +10,6 @@ import '../../domain/usecases/get_countries.dart';
 import '../../domain/usecases/get_states.dart';
 import '../../domain/usecases/get_cities.dart';
 import '../../domain/usecases/save_user.dart';
-import '../../../../core/usecases/usecase.dart';
 
 // Dio provider
 final dioProvider = Provider<Dio>((ref) => Dio());

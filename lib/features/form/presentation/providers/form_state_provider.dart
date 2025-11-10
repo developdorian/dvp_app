@@ -67,13 +67,37 @@ final citiesProvider = FutureProvider.family<List<City>, GetCitiesParams>((ref, 
   );
 });
 
+// Name validation helper
+bool _isValidName(String name) {
+  if (name.trim().isEmpty) return false;
+  
+  final nameRegex = RegExp(r'^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s\-]+$');
+  return nameRegex.hasMatch(name.trim());
+}
+
+// Validation providers for individual fields
+final isFirstNameValidProvider = Provider<bool>((ref) {
+  final firstName = ref.watch(firstNameProvider);
+  return _isValidName(firstName);
+});
+
+final isLastNameValidProvider = Provider<bool>((ref) {
+  final lastName = ref.watch(lastNameProvider);
+  return _isValidName(lastName);
+});
+
 // Form validation
 final isSection1ValidProvider = Provider<bool>((ref) {
   final firstName = ref.watch(firstNameProvider);
   final lastName = ref.watch(lastNameProvider);
   final birthDate = ref.watch(birthDateProvider);
 
-  if (firstName.trim().isEmpty || lastName.trim().isEmpty || birthDate == null) {
+  // Validate name and lastname format
+  if (!_isValidName(firstName) || !_isValidName(lastName)) {
+    return false;
+  }
+
+  if (birthDate == null) {
     return false;
   }
 
@@ -82,7 +106,29 @@ final isSection1ValidProvider = Provider<bool>((ref) {
     return false;
   }
 
+  // Check if user is at least 8 years old
+  final now = DateTime.now();
+  final age = now.year - birthDate.year;
+  final hasHadBirthdayThisYear = now.month > birthDate.month ||
+      (now.month == birthDate.month && now.day >= birthDate.day);
+  final actualAge = hasHadBirthdayThisYear ? age : age - 1;
+
+  if (actualAge < 8) {
+    return false;
+  }
+
   return true;
+});
+
+final calculatedAgeProvider = Provider<int?>((ref) {
+  final birthDate = ref.watch(birthDateProvider);
+  if (birthDate == null) return null;
+
+  final now = DateTime.now();
+  final age = now.year - birthDate.year;
+  final hasHadBirthdayThisYear = now.month > birthDate.month ||
+      (now.month == birthDate.month && now.day >= birthDate.day);
+  return hasHadBirthdayThisYear ? age : age - 1;
 });
 
 final isSection2ValidProvider = Provider<bool>((ref) {
