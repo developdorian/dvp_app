@@ -12,8 +12,7 @@ abstract class GeoRemoteDataSource {
 class GeoRemoteDataSourceImpl implements GeoRemoteDataSource {
   final Dio dio;
   static const String baseUrl = 'https://wft-geo-db.p.rapidapi.com/v1/geo';
-  // TODO: Add to README the user apiKey
-  static const String apiKey = '48cfa88389mshbfc9f79b43a78eap112ff6jsnc74cc7041a94'; // User needs to add their key
+  static const String apiKey = '48cfa88389mshbfc9f79b43a78eap112ff6jsnc74cc7041a94';
 
   GeoRemoteDataSourceImpl({required this.dio}) {
     dio.options.headers = {
@@ -81,12 +80,8 @@ class GeoRemoteDataSourceImpl implements GeoRemoteDataSource {
       });
       
       final List<dynamic> data = response.data['data'];
-      
-      // Debug: print response
-      print('Cities API Response for $countryCode/$stateCode: ${data.length} cities found');
-      
+
       if (data.isEmpty) {
-        print('Warning: No cities found for $countryCode/$stateCode');
         return [];
       }
       
@@ -101,10 +96,8 @@ class GeoRemoteDataSourceImpl implements GeoRemoteDataSource {
       } else if (e.response?.statusCode == 429) {
         throw Exception('Límite de velocidad excedido. Espera un momento.');
       }
-      print('DioException loading cities: ${e.response?.statusCode} - ${e.message}');
       throw Exception('Error al cargar ciudades: ${e.message}');
     } catch (e) {
-      print('Unexpected error loading cities: $e');
       throw Exception('Error inesperado: $e');
     }
   }

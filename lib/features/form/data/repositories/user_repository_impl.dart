@@ -30,4 +30,14 @@ class UserRepositoryImpl implements UserRepository {
       return Left(CacheFailure(e.toString()));
     }
   }
+
+  @override
+  Future<Either<Failure, void>> deleteUser(int index) async {
+    try {
+      await localDataSource.deleteUser(index);
+      return const Right(null);
+    } catch (e) {
+      return Left(CacheFailure(e.toString()));
+    }
+  }
 }

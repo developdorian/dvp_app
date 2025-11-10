@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import '../../domain/entities/address.dart';
 import '../../domain/entities/user.dart';
 import '../../domain/usecases/get_cities.dart';
 import '../providers/form_state_provider.dart';
 import '../providers/form_providers.dart';
+import '../../../home/presentation/providers/home_providers.dart';
 
 class AddressSection extends ConsumerWidget {
   const AddressSection({super.key});
@@ -70,7 +72,7 @@ class AddressSection extends ConsumerWidget {
                   ),
                 ),
               );
-            }).toList(),
+            }),
             const SizedBox(height: 24),
           ],
 
@@ -196,7 +198,7 @@ class AddressSection extends ConsumerWidget {
             border: OutlineInputBorder(),
             prefixIcon: Icon(Icons.public),
           ),
-          value: selectedCountry,
+          initialValue: selectedCountry,
           items: countries.map((country) {
             return DropdownMenuItem(
               value: country,
@@ -269,7 +271,7 @@ class AddressSection extends ConsumerWidget {
             border: OutlineInputBorder(),
             prefixIcon: Icon(Icons.location_city),
           ),
-          value: selectedState,
+          initialValue: selectedState,
           items: states.map((state) {
             return DropdownMenuItem(
               value: state,
@@ -343,7 +345,7 @@ class AddressSection extends ConsumerWidget {
             border: OutlineInputBorder(),
             prefixIcon: Icon(Icons.location_on),
           ),
-          value: selectedCity,
+          initialValue: selectedCity,
           items: cities.map((city) {
             return DropdownMenuItem(
               value: city,
@@ -412,27 +414,41 @@ class AddressSection extends ConsumerWidget {
     
     result.fold(
       (failure) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Error: ${failure.message}'),
-            backgroundColor: Colors.red,
-          ),
-        );
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Error: ${failure.message}'),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }
       },
       (_) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Usuario guardado exitosamente'),
-            backgroundColor: Colors.green,
-          ),
-        );
-        
         // Reset form
         ref.read(formSectionProvider.notifier).state = 0;
         ref.read(firstNameProvider.notifier).state = '';
         ref.read(lastNameProvider.notifier).state = '';
         ref.read(birthDateProvider.notifier).state = null;
         ref.read(addressesProvider.notifier).state = [];
+        
+        // Invalidate users list to refresh home screen
+        ref.invalidate(usersListProvider);
+        
+        if (context.mounted) {
+          context.go('/home');
+          
+          Future.delayed(const Duration(milliseconds: 300), () {
+            if (context.mounted) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('✓ Perfil creado exitosamente'),
+                  backgroundColor: Colors.green,
+                  duration: Duration(seconds: 2),
+                ),
+              );
+            }
+          });
+        }
       },
     );
   }

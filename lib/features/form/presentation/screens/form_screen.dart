@@ -14,9 +14,6 @@ class FormScreen extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Formulario de Usuario'),
-        centerTitle: true,
-        backgroundColor: Colors.blue,
-        foregroundColor: Colors.white,
       ),
       body: SingleChildScrollView(
         child: currentSection == 0

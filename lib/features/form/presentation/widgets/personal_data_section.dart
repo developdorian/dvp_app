@@ -12,6 +12,9 @@ class PersonalDataSection extends ConsumerWidget {
     final lastName = ref.watch(lastNameProvider);
     final birthDate = ref.watch(birthDateProvider);
     final isValid = ref.watch(isSection1ValidProvider);
+    final calculatedAge = ref.watch(calculatedAgeProvider);
+    final isFirstNameValid = ref.watch(isFirstNameValidProvider);
+    final isLastNameValid = ref.watch(isLastNameValidProvider);
 
     return Padding(
       padding: const EdgeInsets.all(24.0),
@@ -27,26 +30,72 @@ class PersonalDataSection extends ConsumerWidget {
           ),
           const SizedBox(height: 32),
           TextField(
-            decoration: const InputDecoration(
+            decoration: InputDecoration(
               labelText: 'Nombre',
-              border: OutlineInputBorder(),
-              prefixIcon: Icon(Icons.person),
+              border: const OutlineInputBorder(),
+              prefixIcon: const Icon(Icons.person),
+              errorText: firstName.isNotEmpty && !isFirstNameValid
+                  ? 'Solo se permiten letras'
+                  : null,
             ),
             onChanged: (value) {
               ref.read(firstNameProvider.notifier).state = value;
             },
           ),
+          if (firstName.isNotEmpty && !isFirstNameValid)
+            Padding(
+              padding: const EdgeInsets.only(top: 8.0, left: 12),
+              child: Row(
+                children: [
+                  Icon(Icons.error_outline, color: Colors.red.shade700, size: 16),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      'No se permiten números ni caracteres especiales',
+                      style: TextStyle(
+                        color: Colors.red.shade700,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
           const SizedBox(height: 16),
           TextField(
-            decoration: const InputDecoration(
+            decoration: InputDecoration(
               labelText: 'Apellido',
-              border: OutlineInputBorder(),
-              prefixIcon: Icon(Icons.person_outline),
+              border: const OutlineInputBorder(),
+              prefixIcon: const Icon(Icons.person_outline),
+              errorText: lastName.isNotEmpty && !isLastNameValid
+                  ? 'Solo se permiten letras'
+                  : null,
             ),
             onChanged: (value) {
               ref.read(lastNameProvider.notifier).state = value;
             },
           ),
+          if (lastName.isNotEmpty && !isLastNameValid)
+            Padding(
+              padding: const EdgeInsets.only(top: 8.0, left: 12),
+              child: Row(
+                children: [
+                  Icon(Icons.error_outline, color: Colors.red.shade700, size: 16),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      'No se permiten números ni caracteres especiales',
+                      style: TextStyle(
+                        color: Colors.red.shade700,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
           const SizedBox(height: 16),
           InkWell(
             onTap: () async {
@@ -77,14 +126,87 @@ class PersonalDataSection extends ConsumerWidget {
               ),
             ),
           ),
-          if (birthDate != null && birthDate.isAfter(DateTime.now()))
-            const Padding(
-              padding: EdgeInsets.only(top: 8.0),
-              child: Text(
-                'La fecha de nacimiento no puede ser futura',
-                style: TextStyle(color: Colors.red, fontSize: 12),
+          if (birthDate != null) ...[
+            if (birthDate.isAfter(DateTime.now()))
+              Padding(
+                padding: const EdgeInsets.only(top: 8.0),
+                child: Row(
+                  children: [
+                    const Icon(Icons.error_outline, color: Colors.red, size: 16),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: Text(
+                        'La fecha de nacimiento no puede ser futura',
+                        style: TextStyle(
+                          color: Colors.red.shade700,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              )
+            else if (calculatedAge != null && calculatedAge < 8)
+              Padding(
+                padding: const EdgeInsets.only(top: 8.0),
+                child: Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: Colors.orange.shade50,
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(color: Colors.orange.shade300),
+                  ),
+                  child: Row(
+                    children: [
+                      Icon(Icons.warning_amber_rounded, color: Colors.orange.shade700, size: 20),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Edad mínima requerida',
+                              style: TextStyle(
+                                color: Colors.orange.shade900,
+                                fontSize: 13,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              'Debes tener al menos 8 años para registrarte. Edad actual: $calculatedAge ${calculatedAge == 1 ? 'año' : 'años'}.',
+                              style: TextStyle(
+                                color: Colors.orange.shade800,
+                                fontSize: 12,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              )
+            else if (calculatedAge != null)
+              Padding(
+                padding: const EdgeInsets.only(top: 8.0),
+                child: Row(
+                  children: [
+                    Icon(Icons.check_circle_outline, color: Colors.green.shade600, size: 16),
+                    const SizedBox(width: 8),
+                    Text(
+                      'Edad: $calculatedAge ${calculatedAge == 1 ? 'año' : 'años'}',
+                      style: TextStyle(
+                        color: Colors.green.shade700,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
+          ],
           const SizedBox(height: 32),
           ElevatedButton(
             onPressed: isValid
