@@ -12,11 +12,11 @@ class AppTheme {
       useMaterial3: true,
       colorScheme: ColorScheme.light(
         primary: primaryBlue,
-        primaryContainer: primaryTurquoise.withOpacity(0.2),
+        primaryContainer: primaryTurquoise.withValues(alpha: 0.2),
         secondary: primaryTurquoise,
-        secondaryContainer: primaryTurquoiseLight.withOpacity(0.2),
+        secondaryContainer: primaryTurquoiseLight.withValues(alpha: 0.2),
         tertiary: primaryPurple,
-        tertiaryContainer: primaryPurple.withOpacity(0.2),
+        tertiaryContainer: primaryPurple.withValues(alpha: 0.2),
         surface: Colors.white,
         surfaceContainerHighest: Colors.grey.shade100,
         onPrimary: Colors.white,
@@ -113,7 +113,7 @@ class AppTheme {
       ),
       
       chipTheme: ChipThemeData(
-        backgroundColor: primaryTurquoise.withOpacity(0.1),
+        backgroundColor: primaryTurquoise.withValues(alpha: 0.1),
         labelStyle: TextStyle(color: primaryBlue),
         side: BorderSide.none,
         shape: RoundedRectangleBorder(
@@ -122,8 +122,8 @@ class AppTheme {
       ),
       
       progressIndicatorTheme: ProgressIndicatorThemeData(
-        color: primaryTurquoise,
-        circularTrackColor: primaryTurquoise.withOpacity(0.2),
+        color: primaryTurquoise.withValues(alpha: 0.2),
+        circularTrackColor: primaryTurquoise.withValues(alpha: 0.2),
       ),
       
       // BottomNavigationBar
@@ -137,7 +137,7 @@ class AppTheme {
       
       navigationBarTheme: NavigationBarThemeData(
         backgroundColor: Colors.white,
-        indicatorColor: primaryTurquoise.withOpacity(0.2),
+        indicatorColor: primaryTurquoise.withValues(alpha: 0.2),
         iconTheme: WidgetStateProperty.resolveWith((states) {
           if (states.contains(WidgetState.selected)) {
             return IconThemeData(color: primaryTurquoise);
